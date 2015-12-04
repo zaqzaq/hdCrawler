@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="homedo" default="jar">
+
+  <!-- Name of the output .jar file -->
+  <property name="jar.name" value="homedo.jar" />
+
+  <!-- Base directory for distribution target -->
+  <property name="deploy.home" value="deploy" />
+
+  <!-- Base directory for compilation targets -->
+  <property name="build.home" value="." />
+
+  <!-- Main class -->
+  <property name="main.class" value="com.zaq.homedo.MainRun" />
+ 
+  <!-- The base directory for all libraries (jar) files -->
+  <property name="lib.home" value="lib" />
+
+	<pathconvert property="mf.classpath" pathsep=" ">  
+		  	      <mapper>  
+		  	        <chainedmapper>  
+		  	          <!-- remove absolute path -->  
+		  	          <flattenmapper />  
+		  	  
+		  	          <!-- add lib/ prefix -->  
+		  	          <globmapper from="*" to="lib/*" />  
+		  	        </chainedmapper>  
+		  	      </mapper>  
+		  	      <path>  
+		  	        <!-- lib.home contains all jar files,   
+		  	                                        in several subdirectories -->  
+		  	        <fileset dir="${lib.home}">  
+		  	          <include name="**/*.jar" />  
+		  	        </fileset>  
+		  	      </path>  
+		  	  
+	</pathconvert> 
+	
+	<path id="classpath"> 
+		<fileset file="${lib.dir}" includes="**/*.jar" />
+	</path>	
+
+    <target name="compile">
+    	<mkdir dir="${deploy.home}/classes"/>
+    	
+    	<copydir dest="${deploy.home}/classes" src="src"></copydir>
+      	<copy todir="${deploy.home}/classes">
+      		<fileset dir="src">
+      			<exclude name="**/*.java"/>
+      			<include name="**/*.*"/>
+      		</fileset>
+      	</copy>
+    	<javac destdir="${deploy.home}/classes" classpathref="classpath" encoding="UTF-8">
+    		<src path="src"/>
+    	</javac>
+    </target>
+	<!-- Next, my package task uses that classpath -->
+	<target name="jar" depends="compile">
+	  
+	  <!-- now build the manifest file, using mf.classpath -->
+	  <tstamp/><!-- needed for TODAY -->
+		  <manifest file="MANIFEST.MF">
+		    <attribute name="Main-Class" value="${main.class}"/>
+		    <attribute name="Built-Date" value="${TODAY}"/>
+		    <attribute name="Class-Path" value="${mf.classpath}" />
+		  </manifest>
+		  
+	  <!-- create the jar file, including the manifest file we just created -->
+		
+	<mkdir dir="${deploy.home}/lib"/>
+	  <jar basedir="${deploy.home}/classes" 
+	       destfile="${deploy.home}/${jar.name}"
+	       includes="**/*.*"
+	       manifest="MANIFEST.MF" />
+
+	  <!-- copy all the jar files out to the destination directory (dest.dir) -->
+	  <copy todir="${deploy.home}/lib">
+	    <fileset dir="${lib.home}">
+	      <exclude name="junit*" />
+	      <include name="*.jar"/>
+	      <include name="*.zip"/>
+	    </fileset>
+	  	
+	  </copy>
+
+	  <delete dir="${deploy.home}/classes" />
+		
+	</target>
+</project>
