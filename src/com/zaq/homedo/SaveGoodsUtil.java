@@ -25,7 +25,7 @@ import com.zaq.homedo.bean.PropForList;
  */
 public class SaveGoodsUtil {
 	static Logger logger=Logger.getLogger(SaveGoodsUtil.class);
-	private static String PATH_B2B="http://b2b.homedo.com";
+	private static String PATH_B2B="http://bb.hd.com";
 	static Pattern pattern=Pattern.compile("eval\\('(.+?)'\\)");
 	/**
 	 * 保存最终的物品信息
