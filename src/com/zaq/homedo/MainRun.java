@@ -17,9 +17,9 @@ import com.zaq.homedo.bean.Goods;
 
 public class MainRun {
 	static Logger logger=Logger.getLogger(MainRun.class);
-	private static String PATH_ROOT="http://www.homedo.com/";
+	private static String PATH_ROOT="http://www.hd.com/";
 	
-	private static String PAGE_LIST="http://b2b.homedo.com/goods/c/{category}?page={page}";
+	private static String PAGE_LIST="http://bb.hd.com/goods/c/{category}?page={page}";
 	
 	public static void main(String[] args) throws Exception {
 		//初始化环境
